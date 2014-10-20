@@ -35,7 +35,7 @@ namespace imap_client_app
         private RichTextBox m_pTabPageLog_LogText = null;
 
         private IMAP_Client m_pImap = null;
-        private string folder_id = "";
+        public string folder_id = "";
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -406,28 +406,13 @@ namespace imap_client_app
         {
             try
             {
-                foreach (ListViewItem item in m_pTabPageMail_MessageAttachments.Items)
+                MIME_Entity entity = (MIME_Entity)m_pTabPageMail_MessageAttachments.SelectedItems[0].Tag;
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.FileName = m_pTabPageMail_MessageAttachments.SelectedItems[0].Text;
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    MIME_Entity entity = (MIME_Entity)item.Tag;
-                    bool exists = Directory.Exists("attachments/" + folder_id);
-                    if (!exists)
-                    {
-                        Directory.CreateDirectory("attachments/" + folder_id);
-                    }
-                    File.WriteAllBytes("attachments/" + folder_id + "/" + item.Text, ((MIME_b_SinglepartBase)entity.Body).Data);
-                    //SaveFileDialog dlg = new SaveFileDialog();
-                    //dlg.FileName = item.Text;
-                    //if (dlg.ShowDialog(this) == DialogResult.OK)
-                    //{
-                    //    File.WriteAllBytes(dlg.FileName, ((MIME_b_SinglepartBase)entity.Body).Data);
-                    //}
+                    File.WriteAllBytes(dlg.FileName, ((MIME_b_SinglepartBase)entity.Body).Data);
                 }
-                //MIME_Entity entity = (MIME_Entity)m_pTabPageMail_MessageAttachments.SelectedItems[0].Tag;
-                //SaveFileDialog dlg = new SaveFileDialog();
-                //dlg.FileName = m_pTabPageMail_MessageAttachments.SelectedItems[0].Text;
-                //if(dlg.ShowDialog(this) == DialogResult.OK){                    
-                //    File.WriteAllBytes(dlg.FileName,((MIME_b_SinglepartBase)entity.Body).Data);
-                //}
             }
             catch (Exception x)
             {
@@ -613,26 +598,39 @@ namespace imap_client_app
                                 {
                                     Directory.CreateDirectory("attachments/" + folder_id);
                                 }
+                                string fileType = Path.GetExtension(item.Text);
+
                                 File.WriteAllBytes("attachments/" + folder_id + "/" + item.Text, ((MIME_b_SinglepartBase)entity.Body).Data);
-                                OleDbCommand command = new OleDbCommand();
-                                OleDbDataAdapter adapter = new OleDbDataAdapter();
-                                //OleDbConnection connection = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Path.GetDirectoryName(Application.ExecutablePath) + "//attachments//" + folder_id + "//" + item.Text + "; Extended Properties='Excel 8.0;HDR=Yes;IMAX=1'");
-                                OleDbConnection connection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Path.GetDirectoryName(Application.ExecutablePath) + "//attachments//" + folder_id + "//" + item.Text + "; Extended Properties=Excel 12.0;");
-                                connection.Open();
-                                DataTable oleDbSchemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, null);
-                                if (oleDbSchemaTable.Rows.Count > 0)
+                                if (fileType == ".xlsx")
                                 {
-                                    str = oleDbSchemaTable.Rows[0]["TABLE_NAME"].ToString();
+                                    OleDbCommand command = new OleDbCommand();
+                                    OleDbDataAdapter adapter = new OleDbDataAdapter();
+                                    //OleDbConnection connection = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Path.GetDirectoryName(Application.ExecutablePath) + "//attachments//" + folder_id + "//" + item.Text + "; Extended Properties='Excel 8.0;HDR=Yes;IMAX=1'");
+                                    OleDbConnection connection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + Path.GetDirectoryName(Application.ExecutablePath) + "//attachments//" + folder_id + "//" + item.Text + "; Extended Properties=Excel 12.0;");
+                                    connection.Open();
+                                    DataTable oleDbSchemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, null);
+                                    if (oleDbSchemaTable.Rows.Count > 0)
+                                    {
+                                        str = oleDbSchemaTable.Rows[0]["TABLE_NAME"].ToString();
+                                    }
+                                    command = new OleDbCommand("SELECT * FROM [" + str + "]", connection);
+                                    adapter.SelectCommand = command;
+                                    adapter.Fill(dataTable);
+                                    connection.Close();
+                                    for (int i = 0; i < dataTable.Rows.Count; i++)
+                                    {
+                                        clsdt.executeQuery("insert into attachment_dtl(mm_message_id,ad_data1,ad_data2,ad_data3) values('<" + folder_id + ">','" + dataTable.Rows[i][0] + "','" + dataTable.Rows[i][1] + "','" + dataTable.Rows[i][2] + "')");
+                                    }
+                                    frmShowExcelData frmSED = new frmShowExcelData();
+                                    frmSED.showdata(folder_id);
+                                    frmSED.ShowDialog();
                                 }
-                                command = new OleDbCommand("SELECT * FROM [" + str + "]", connection);
-                                adapter.SelectCommand = command;
-                                adapter.Fill(dataTable);
-                                connection.Close();
-                                for (int i = 0; i < dataTable.Rows.Count; i++)
+                                else
                                 {
-                                    clsdt.executeQuery("insert into attachment_dtl(mm_message_id,ad_data1,ad_data2,ad_data3) values('<" + folder_id + ">','" + dataTable.Rows[i][0] + "','" + dataTable.Rows[i][1] + "','" + dataTable.Rows[i][2] + "')");
+                                    MessageBox.Show("Attachment file is not in Excel format");
                                 }
                             }
+                            
                         }
                         catch (Exception x)
                         {

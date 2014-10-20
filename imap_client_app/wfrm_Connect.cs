@@ -98,7 +98,8 @@ namespace imap_client_app
             m_pUserName = new TextBox();
             m_pUserName.Size = new Size(205,20);
             m_pUserName.Location = new Point(85,60);
-            m_pUserName.Text = "_mail";
+            //m_pUserName.Text = "nisar.sql@gmail.com";
+            m_pUserName.Text = "nisar@**.com";
 
             mt_Password = new Label();
             mt_Password.Size = new Size(80,20);
@@ -110,7 +111,7 @@ namespace imap_client_app
             m_pPassword.Size = new Size(205,20);
             m_pPassword.Location = new Point(85,85);
             m_pPassword.PasswordChar = '*';
-            m_pPassword.Text = "_pass";
+            m_pPassword.Text = "**";
 
             m_pCancel = new Button();
             m_pCancel.Size = new Size(70,20);

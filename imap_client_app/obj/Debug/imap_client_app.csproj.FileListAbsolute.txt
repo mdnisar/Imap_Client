@@ -26,3 +26,15 @@ C:\Users\admin1\Downloads\imap_client_app-2014-10-18\imap_client_app\bin\Debug\i
 C:\Users\admin1\Downloads\imap_client_app-2014-10-18\imap_client_app\bin\Debug\LumiSoft.Net.pdb
 C:\Users\admin1\Downloads\imap_client_app-2014-10-18\imap_client_app\bin\Debug\LumiSoft.Net.xml
 C:\Users\admin1\Downloads\imap_client_app-2014-10-18\imap_client_app\bin\Debug\LumiSoft.Net.dll
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.exe
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.pdb
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\ResolveAssemblyReference.cache
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.wfrm_Main.resources
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.csproj.GenerateResource.Cache
+F:\scrap\new git to update\Imap_Client\imap_client_app\bin\Debug\imap_client_app.exe
+F:\scrap\new git to update\Imap_Client\imap_client_app\bin\Debug\imap_client_app.pdb
+F:\scrap\new git to update\Imap_Client\imap_client_app\bin\Debug\LumiSoft.Net.dll
+F:\scrap\new git to update\Imap_Client\imap_client_app\bin\Debug\LumiSoft.Net.pdb
+F:\scrap\new git to update\Imap_Client\imap_client_app\bin\Debug\LumiSoft.Net.xml
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.wfrm_ExportAttachment_SaveExcelToDB.resources
+F:\scrap\new git to update\Imap_Client\imap_client_app\obj\Debug\imap_client_app.frmShowExcelData.resources
