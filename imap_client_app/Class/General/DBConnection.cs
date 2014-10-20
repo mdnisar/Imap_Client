@@ -11,7 +11,7 @@ namespace imap_client_app
         protected SqlConnection sqlcon;
         public DBConnection()
         {
-            sqlcon = new SqlConnection(@"Data Source=.;database=NSupport;uid=sa;pwd=n@1;Connect Timeout=120;");
+            sqlcon = new SqlConnection(@"Data Source=.;database=del;integrated security=true;Connect Timeout=120;");
         }
     }
 }

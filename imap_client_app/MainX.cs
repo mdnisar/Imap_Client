@@ -18,7 +18,7 @@ namespace imap_client_app
 		{
             try{
                 Application.EnableVisualStyles();
-			    Application.Run(new wfrm_Main());
+			    Application.Run(new wfrm_ExportAttachment_SaveExcelToDB());
             }
             catch{
             }

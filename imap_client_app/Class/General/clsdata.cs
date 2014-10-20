@@ -12,7 +12,7 @@ namespace imap_client_app
         private SqlCommand com;
         private string dmlString;
         private SqlDataReader sqlDr;
-        private SqlConnection sqlCnn = new SqlConnection("server=.;database=NSupport;uid=sa;pwd=n@1");
+        private SqlConnection sqlCnn = new SqlConnection("Data Source=.;database=del;integrated security=true;");
         public DataTable getDataTable(string qry)
         {
             if (sqlCnn.State != ConnectionState.Open)
