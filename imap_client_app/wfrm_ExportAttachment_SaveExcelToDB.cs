@@ -31,6 +31,15 @@ namespace imap_client_app
         private ListView m_pTabPageMail_Messages = null;
         private ListView m_pTabPageMail_MessageAttachments = null;
         private TextBox m_pTabPageMail_MessageText = null;
+        //TabPage Report
+        private DataGridView m_pTabPageReport_dgDownlodedData = null;
+        private DataGridViewTextBoxColumn dgvtc_mm_from = null ;
+        private DataGridViewTextBoxColumn dgvtc_mm_sub = null;
+        private DataGridViewTextBoxColumn dgvtc_mm_date = null;
+        private DataGridViewTextBoxColumn dgvtc_mm_size = null;
+        private DataGridViewTextBoxColumn dgvtc_am_name = null;
+        
+
         // TabPage log
         private RichTextBox m_pTabPageLog_LogText = null;
 
@@ -230,13 +239,65 @@ namespace imap_client_app
 
             #endregion
 
+            #region TabPage Report
+
+            m_pTab.TabPages.Add("Report");
+            m_pTab.TabPages[2].ClientSize = new Size(700, 500);
+
+            m_pTabPageReport_dgDownlodedData = new DataGridView();
+            m_pTabPageReport_dgDownlodedData.Dock = DockStyle.Fill;
+            m_pTabPageReport_dgDownlodedData.AllowUserToAddRows = false;
+            m_pTabPageReport_dgDownlodedData.AllowUserToOrderColumns = true;
+            m_pTabPageReport_dgDownlodedData.AutoGenerateColumns = true;
+            
+            //dgvtc_mm_from.DataPropertyName = "mm_from";
+            //dgvtc_mm_from.HeaderText = "From";
+            //dgvtc_mm_from.Name = "mm_from";
+            //dgvtc_mm_from.ReadOnly = true;
+
+            //dgvtc_mm_sub.DataPropertyName = "mm_sub";
+            //dgvtc_mm_sub.HeaderText = "Subject";
+            //dgvtc_mm_sub.Name = "mm_sub";
+            //dgvtc_mm_sub.ReadOnly = true;
+
+            //dgvtc_mm_date.DataPropertyName = "mm_date";
+            //dgvtc_mm_date.HeaderText = "Date";
+            //dgvtc_mm_date.Name = "mm_date";
+            //dgvtc_mm_date.ReadOnly = true;
+
+            //dgvtc_mm_size.DataPropertyName = "mm_size";
+            //dgvtc_mm_size.HeaderText = "Size";
+            //dgvtc_mm_size.Name = "mm_size";
+            //dgvtc_mm_size.ReadOnly = true;
+
+            //dgvtc_am_name.DataPropertyName = "am_name";
+            //dgvtc_am_name.HeaderText = "Attachments";
+            //dgvtc_am_name.Name = "am_name";
+            //dgvtc_am_name.ReadOnly = true;
+
+            //m_pTabPageReport_dgDownlodedData.Columns.Add(dgvtc_mm_from);
+            //m_pTabPageReport_dgDownlodedData.Columns.Add(dgvtc_mm_sub);
+            //m_pTabPageReport_dgDownlodedData.Columns.Add(dgvtc_mm_date);
+            //m_pTabPageReport_dgDownlodedData.Columns.Add(dgvtc_mm_size);
+            //m_pTabPageReport_dgDownlodedData.Columns.Add(dgvtc_am_name);
+
+           
+
+           
+            m_pTab.TabPages[2].Controls.Add(m_pTabPageReport_dgDownlodedData);
+
+            #endregion
+
         }
 
         #endregion
 
 
         #region Events Handling
-
+        void loadOldData()
+        {
+            m_pTabPageReport_dgDownlodedData.DataSource = clsdt.getDataTable("select mm.mm_from as [From],mm.mm_sub as Subject,mm.mm_date as Date,mm.mm_size as Size,am.am_name as Attachment from mail_mst mm inner join attachment_mst am on mm.mm_message_id = am.mm_message_id");
+        }
         #region method wfrm_Main_Shown
 
         private void wfrm_Main_Shown(object sender, EventArgs e)
@@ -249,6 +310,7 @@ namespace imap_client_app
                 m_pImap.MessageExpunged += new EventHandler<EventArgs<IMAP_r_u_Expunge>>(m_pImap_MessageExpunged);
 
                 LoadFolders();
+                loadOldData();
             }
             else
             {
@@ -449,6 +511,7 @@ namespace imap_client_app
         /// <param name="e">Event data.</param>
         private void m_pImap_Fetch_MessageItems_UntaggedResponse(object sender, EventArgs<IMAP_r_u> e)
         {
+
             /* NOTE: All IMAP untagged responses may be raised from thread pool thread,
                 so all UI operations must use Invoke.
              
